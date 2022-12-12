@@ -1,0 +1,10 @@
+server:
+  port: 8080
+
+spring:
+  redis:
+    database: 10
+    host: 127.0.0.1
+    port: 6379
+    password: ddbs
+    timeout: 1000
