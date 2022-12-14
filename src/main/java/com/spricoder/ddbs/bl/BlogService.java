@@ -1,9 +1,11 @@
 package com.spricoder.ddbs.bl;
 
 import com.spricoder.ddbs.vo.ArticleDetailVO;
+import com.spricoder.ddbs.vo.ArticleUpsertVO;
 import com.spricoder.ddbs.vo.ArticleVO;
 import com.spricoder.ddbs.vo.PageList;
 import com.spricoder.ddbs.vo.ReadingVO;
+import com.spricoder.ddbs.vo.UserUpsertVO;
 import com.spricoder.ddbs.vo.UserVO;
 
 import java.util.List;
@@ -74,4 +76,19 @@ public interface BlogService {
      * @return
      */
     byte[] queryVideo(String videoName);
+
+    /**
+     * 插入或更新文章，只更新部分字段，像图片视频这种太麻烦就不做了
+     * @param articleUpsertVO 如果aid为空就是插入，否则就是更新
+     * @return
+     */
+    boolean upsertArticle(ArticleUpsertVO articleUpsertVO);
+
+    /**
+     * 插入或更新用户，只更新部分字段
+     * @param userUpsertVO 如果uid为空就是插入，否则就是更新
+     * @return
+     */
+    boolean upsertUser(UserUpsertVO userUpsertVO);
+
 }
