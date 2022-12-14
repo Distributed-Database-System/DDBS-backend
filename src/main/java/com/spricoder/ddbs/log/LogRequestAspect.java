@@ -11,6 +11,8 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -38,7 +40,7 @@ public class LogRequestAspect {
     public Object doAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         Log myLog = new Log();
         long startTime = System.currentTimeMillis();
-        MyResponse result;
+        ResponseEntity<?> result;
         // 执行方法前
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (attributes != null) {
@@ -59,18 +61,18 @@ public class LogRequestAspect {
                 log.debug("Before:" + myLog);
             }
             // 执行方法
-            result = (MyResponse) proceedingJoinPoint.proceed();
+            result = (ResponseEntity<?>) proceedingJoinPoint.proceed();
 
             if(request.getRequestURI() != null && request.getRequestURI().length() != 0){
                 // 执行方法后
-                myLog.setCode(result != null ? result.getCode(): ResponseCode.OK);
+                myLog.setCode(result != null ? result.getStatusCode().value(): HttpStatus.OK.value());
                 myLog.setProcessTime(System.currentTimeMillis() - startTime);
 
                 monitorService.addLog(myLog);
                 log.debug("After:" + myLog);
             }
         } else {
-            result = (MyResponse) proceedingJoinPoint.proceed();
+            result = (ResponseEntity<?>) proceedingJoinPoint.proceed();
             log.error("ServletRequestAttributes is empty.");
         }
         return result;
