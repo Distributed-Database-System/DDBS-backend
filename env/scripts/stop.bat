@@ -1,5 +1,5 @@
-@REM app
-docker stop library
+@REM @REM app
+@REM docker stop library
 
 
 @REM mongodb
