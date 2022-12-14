@@ -33,9 +33,9 @@ mongosh --host localhost --port 40002 ..\mongodb\generate-rank.js
 
 
 @REM app
-cd ..\library
-call mvn clean package -DskipTests
-docker rmi library:dev
-docker build -t library:dev .
-docker run -d --name library -p 8080:8080 library:dev
-docker network connect hdfs_hadoopnet library
+@REM cd ..\library
+@REM call mvn clean package -DskipTests
+@REM docker rmi library:dev
+@REM docker build -t library:dev .
+@REM docker run -d --name library -p 8080:8080 library:dev
+@REM docker network connect hdfs_hadoopnet library
