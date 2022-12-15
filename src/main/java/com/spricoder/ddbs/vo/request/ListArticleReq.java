@@ -26,8 +26,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ListArticleReq {
-    String aid;
-    String title;
-    int pageNo;
-    int pageSize;
+  String aid;
+  String title;
+  int pageNo;
+  int pageSize;
 }

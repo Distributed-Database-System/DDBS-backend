@@ -22,7 +22,6 @@ package com.spricoder.ddbs.bl;
 import com.spricoder.ddbs.vo.ArticleDetailVO;
 import com.spricoder.ddbs.vo.ArticleUpsertVO;
 import com.spricoder.ddbs.vo.ArticleVO;
-import com.spricoder.ddbs.vo.PageList;
 import com.spricoder.ddbs.vo.ReadingVO;
 import com.spricoder.ddbs.vo.UserUpsertVO;
 import com.spricoder.ddbs.vo.UserVO;
@@ -31,28 +30,37 @@ import java.io.IOException;
 import java.util.List;
 
 public interface BlogService {
-    /**
-     * 获取user列表，uid和name都可能为空，可能其中一个有值或都有值。都为空代表全量查询。
-     * @param uid
-     * @param name
-     * @return
-     */
-    List<UserVO> getUserList(String uid, String name);
+  /**
+   * 获取user列表，uid和name都可能为空，可能其中一个有值或都有值。都为空代表全量查询。
+   *
+   * @param uid
+   * @param name
+   * @param pageNo
+   * @param pageSize
+   * @return
+   */
+  List<UserVO> getUserList(String uid, String name, int pageNo, int pageSize);
 
-    /**
-     * 获取文章列表，aid和title都可能为空，可能其中一个有值或都有值。都为空代表全量查询。
-     * @param aid
-     * @param title
-     * @return
-     */
-    List<ArticleVO> getArticleList(String aid, String title);
+  /**
+   * 获取文章列表，aid和title都可能为空，可能其中一个有值或都有值。都为空代表全量查询。
+   *
+   * @param aid
+   * @param title
+   * @param pageNo
+   * @param pageSize
+   * @return
+   */
+  List<ArticleVO> getArticleList(String aid, String title, int pageNo, int pageSize);
 
-    /**
-     * 获取某个uid的阅读记录
-     * @param uid 非空
-     * @return
-     */
-    List<ReadingVO> getReadingList(String uid);
+  /**
+   * 获取某个uid的阅读记录
+   *
+   * @param uid 非空
+   * @param pageNo
+   * @param pageSize
+   * @return
+   */
+  List<ReadingVO> getReadingList(String uid, int pageNo, int pageSize);
 
   /**
    * 获取某个aid对应的具体文章，需要返回结果，并记录根据uid、aid更新read、beread和popular(?)

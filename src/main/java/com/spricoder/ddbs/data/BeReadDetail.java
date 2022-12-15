@@ -26,6 +26,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -66,4 +67,36 @@ public class BeReadDetail implements Serializable {
 
   @Field("shareUidList")
   private List<String> shareUidList;
+
+  public BeReadDetail() {
+    this.timestamp = String.valueOf(System.currentTimeMillis());
+    this.readNum = 0;
+    this.commentNum = 0;
+    this.agreeNum = 0;
+    this.shareNum = 0;
+    this.readUidList = new ArrayList<>();
+    this.agreeUidList = new ArrayList<>();
+    this.commentUidList = new ArrayList<>();
+    this.shareUidList = new ArrayList<>();
+  }
+
+  public void read(String uid) {
+    this.readNum++;
+    this.readUidList.add(uid);
+  }
+
+  public void agree(String uid) {
+    this.agreeNum++;
+    this.agreeUidList.add(uid);
+  }
+
+  public void share(String uid) {
+    this.shareNum++;
+    this.shareUidList.add(uid);
+  }
+
+  public void comment(String uid) {
+    this.commentNum++;
+    this.commentUidList.add(uid);
+  }
 }

@@ -19,6 +19,8 @@
 
 package com.spricoder.ddbs.vo;
 
+import com.spricoder.ddbs.data.Article;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,4 +35,12 @@ public class ArticleVO {
   private String category;
   private String articleAbstract;
   private String authors;
+
+  public ArticleVO(Article article) {
+    this.aid = article.getAid();
+    this.title = article.getTitle();
+    this.category = article.getCategory();
+    this.articleAbstract = article.getArticleAbstract();
+    this.authors = article.getAuthors();
+  }
 }
