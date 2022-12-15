@@ -31,37 +31,28 @@ import java.io.IOException;
 import java.util.List;
 
 public interface BlogService {
-  /**
-   * 获取user列表，uid和name都可能为空，可能其中一个有值或都有值。都为空代表全量查询。
-   *
-   * @param uid
-   * @param name
-   * @param pageNo 分页查询，从1开始
-   * @param pageSize 每页的条目数
-   * @return
-   */
-  PageList<UserVO> getUserList(String uid, String name, int pageNo, int pageSize);
+    /**
+     * 获取user列表，uid和name都可能为空，可能其中一个有值或都有值。都为空代表全量查询。
+     * @param uid
+     * @param name
+     * @return
+     */
+    List<UserVO> getUserList(String uid, String name);
 
-  /**
-   * 获取文章列表，aid和title都可能为空，可能其中一个有值或都有值。都为空代表全量查询。
-   *
-   * @param aid
-   * @param title
-   * @param pageNo 分页查询，从1开始
-   * @param pageSize 每页的条目数
-   * @return
-   */
-  PageList<ArticleVO> getArticleList(String aid, String title, int pageNo, int pageSize);
+    /**
+     * 获取文章列表，aid和title都可能为空，可能其中一个有值或都有值。都为空代表全量查询。
+     * @param aid
+     * @param title
+     * @return
+     */
+    List<ArticleVO> getArticleList(String aid, String title);
 
-  /**
-   * 获取某个uid的阅读记录
-   *
-   * @param uid 非空
-   * @param pageNo 分页查询，从1开始
-   * @param pageSize 每页的条目数
-   * @return
-   */
-  PageList<ReadingVO> getArticleByAid(String uid, int pageNo, int pageSize);
+    /**
+     * 获取某个uid的阅读记录
+     * @param uid 非空
+     * @return
+     */
+    List<ReadingVO> getReadingList(String uid);
 
   /**
    * 获取某个aid对应的具体文章，需要返回结果，并记录根据uid、aid更新read、beread和popular(?)
