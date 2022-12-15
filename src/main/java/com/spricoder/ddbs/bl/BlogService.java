@@ -27,6 +27,7 @@ import com.spricoder.ddbs.vo.ReadingVO;
 import com.spricoder.ddbs.vo.UserUpsertVO;
 import com.spricoder.ddbs.vo.UserVO;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface BlogService {
@@ -112,4 +113,7 @@ public interface BlogService {
    * @return
    */
   boolean upsertUser(UserUpsertVO userUpsertVO);
+
+  /** Test connection of hdfs */
+  String pingHDFS() throws IOException;
 }
