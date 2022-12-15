@@ -18,7 +18,6 @@
  */
 package com.spricoder.ddbs.controller;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,25 +28,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.ServletContext;
-import java.io.IOException;
 
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/user")
 public class BlogController {
 
-    @Autowired
-    private ServletContext servletContext;
+  @Autowired private ServletContext servletContext;
 
-    @ResponseBody
-    @RequestMapping(value = "/image-resource", method = RequestMethod.GET)
-    public ResponseEntity<byte[]> getImageAsResource() throws IOException {
-        byte[] bytes = StreamUtils.copyToByteArray(servletContext.getResourceAsStream("/image/0.jpg"));
+  @ResponseBody
+  @RequestMapping(value = "/image-resource", method = RequestMethod.GET)
+  public ResponseEntity<byte[]> getImageAsResource() throws IOException {
+    byte[] bytes = StreamUtils.copyToByteArray(servletContext.getResourceAsStream("/image/0.jpg"));
 
-        return ResponseEntity
-                .ok()
-                .contentType(MediaType.IMAGE_JPEG)
-                .body(bytes);
-    }
-
+    return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(bytes);
+  }
 }

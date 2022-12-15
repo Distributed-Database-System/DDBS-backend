@@ -1,12 +1,11 @@
 package com.spricoder.ddbs.bl;
 
-
 public interface RedisService {
-    void set(String key, Object value);
+  void set(String key, Object value);
 
-    String get(String key);
+  String get(String key);
 
-    void setTime(String key, Object value, long seconds);
+  void setTime(String key, Object value, long seconds);
 
-    boolean delete(String key);
+  boolean delete(String key);
 }

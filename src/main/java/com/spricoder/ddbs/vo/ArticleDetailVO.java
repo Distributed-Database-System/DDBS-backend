@@ -24,5 +24,4 @@ public class ArticleDetailVO {
   private Integer agreeNum;
   private Integer commentNum;
   private Integer shareNum;
-
 }

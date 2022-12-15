@@ -3,8 +3,6 @@ package com.spricoder.ddbs.vo;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 public class ArticleUpsertVO {

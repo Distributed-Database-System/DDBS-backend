@@ -5,19 +5,13 @@ import lombok.Data;
 
 import java.util.List;
 
-/**
- * 用于包装分页结果
- */
+/** 用于包装分页结果 */
 @Data
 @AllArgsConstructor
 public class PageList<T> {
-    /**
-     * 总条目
-     */
-    int total;
+  /** 总条目 */
+  int total;
 
-    /**
-     * 分页后的数据条目
-     */
-    List<T> data;
+  /** 分页后的数据条目 */
+  List<T> data;
 }
