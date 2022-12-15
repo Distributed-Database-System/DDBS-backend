@@ -26,14 +26,11 @@ import com.spricoder.ddbs.vo.ReadingVO;
 import com.spricoder.ddbs.vo.UserUpsertVO;
 import com.spricoder.ddbs.vo.UserVO;
 
-import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Service
 public class MockBlogServiceImpl implements BlogService {
   @Override
   public List<UserVO> getUserList(String uid, String name, int pageNo, int pageSize) {

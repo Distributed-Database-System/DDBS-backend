@@ -41,17 +41,21 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+@Service
 public class BlogServiceImpl implements BlogService {
   @Autowired private HDFSManager hdfsManager;
   @Autowired private MongoTemplate mongoTemplate;
@@ -76,7 +80,7 @@ public class BlogServiceImpl implements BlogService {
   public List<ArticleVO> getArticleList(String aid, String title, int pageNo, int pageSize) {
     ArrayList<Criteria> criteria = new ArrayList<>();
     if (aid != null) {
-      criteria.add(Criteria.where("uid").is(aid));
+      criteria.add(Criteria.where("aid").is(aid));
     }
     if (title != null) {
       criteria.add(Criteria.where("title").is(title));
@@ -109,6 +113,7 @@ public class BlogServiceImpl implements BlogService {
       } else {
         readingVO.setTitle(aidToTitle.get(readingVO.getAid()));
       }
+      result.add(readingVO);
     }
     return result;
   }
@@ -232,10 +237,14 @@ public class BlogServiceImpl implements BlogService {
 
   @Override
   public List<ReadingVO> getRank(String type, long timestamp) {
+    String timeStr = transform(type, timestamp);
+    if (timeStr.length() == 0) {
+      return new ArrayList<>();
+    }
     List<Criteria> criteriaList =
         Arrays.asList(
             Criteria.where("temporal_granularity").is(type),
-            Criteria.where("timestamp").is(timestamp));
+            Criteria.where("timestamp").is(timeStr));
     Query getRankQuery = generateQuery(criteriaList);
     Rank rank = mongoTemplate.findOne(getRankQuery, Rank.class);
     if (rank == null) {
@@ -245,6 +254,30 @@ public class BlogServiceImpl implements BlogService {
     Query articleQuery = generateQuery(Criteria.where("aid").in(rank.getArticleAids()));
     List<ReadDetail> articles = mongoTemplate.find(articleQuery, ReadDetail.class);
     return articles.stream().map(ReadingVO::new).collect(Collectors.toList());
+  }
+
+  public static String transform(String type, long timestamp) {
+    StringBuilder result = new StringBuilder("year:");
+    Calendar calendar = Calendar.getInstance(Locale.getDefault(Locale.Category.FORMAT));
+    calendar.setTimeInMillis(timestamp);
+    result.append(calendar.get(Calendar.YEAR));
+    if ("daily".equals(type)) {
+      result.append("-day:");
+      result.append(calendar.get(Calendar.DAY_OF_YEAR));
+    } else if ("weekly".equals(type)) {
+      result.append("-week:");
+      result.append(calendar.get(Calendar.WEEK_OF_YEAR));
+    } else if ("monthly".equals(type)) {
+      result.append("-month:");
+      int month = calendar.get(Calendar.MONTH) + 1;
+      if (month < 10) {
+        result.append("0");
+      }
+      result.append(calendar.get(Calendar.MONTH) + 1);
+    } else {
+      return "";
+    }
+    return result.toString();
   }
 
   private Query generateQuery(Criteria criteria) {
@@ -267,12 +300,12 @@ public class BlogServiceImpl implements BlogService {
   }
 
   private Query generateQuery(Criteria criteria, int pageNo, int pageSize) {
-    Pageable pageable = PageRequest.of(Math.min(0, pageNo - 1), pageSize);
+    Pageable pageable = PageRequest.of(Math.max(0, pageNo - 1), pageSize);
     return generateQuery(criteria).with(pageable);
   }
 
   private Query generateQuery(List<Criteria> criteriaList, int pageNo, int pageSize) {
-    Pageable pageable = PageRequest.of(Math.min(0, pageNo - 1), pageSize);
+    Pageable pageable = PageRequest.of(Math.max(0, pageNo - 1), pageSize);
     return generateQuery(criteriaList).with(pageable);
   }
 
