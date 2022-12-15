@@ -19,5 +19,4 @@
 
 package com.spricoder.ddbs.enums;
 
-public enum TestEnum {
-}
+public enum TestEnum {}

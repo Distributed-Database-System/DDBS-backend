@@ -22,6 +22,7 @@ package com.spricoder.ddbs.controller;
 import com.spricoder.ddbs.constant.MyResponse;
 import com.spricoder.ddbs.form.TestForm;
 import com.spricoder.ddbs.vo.TestVO;
+
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,7 +37,7 @@ import javax.validation.Valid;
 public class TestController {
 
   @GetMapping("/heartbeat")
-  public MyResponse heartbeat(){
+  public MyResponse heartbeat() {
     return MyResponse.ok("Alive!");
   }
 
