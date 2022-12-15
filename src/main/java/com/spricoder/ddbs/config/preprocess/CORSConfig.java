@@ -19,6 +19,8 @@ public class CORSConfig {
             "localhost:8002",
             "localhost:8080",
             "127.0.0.1:8002",
+            "localhost:8081",
+            "127.0.0.1:8001",
             "127.0.0.1"
     };
 

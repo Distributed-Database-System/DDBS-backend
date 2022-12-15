@@ -1,11 +1,13 @@
 package com.spricoder.ddbs.vo;
 
 import com.spricoder.ddbs.data.User;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class UserVO {
 
     private String uid;
