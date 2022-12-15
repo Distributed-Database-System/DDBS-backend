@@ -17,34 +17,37 @@
  * under the License.
  */
 
-package com.spricoder.ddbs.blImpl;
+package com.spricoder.ddbs.metric.type;
 
-import com.spricoder.ddbs.bl.MonitorService;
-import com.spricoder.ddbs.data.ExceptionMsg;
-import com.spricoder.ddbs.data.Log;
-import com.spricoder.ddbs.metric.MetricService;
-
+import io.micrometer.core.instrument.Tags;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+
+import java.lang.ref.WeakReference;
+import java.util.function.ToLongFunction;
 
 @Slf4j
-@Service
-public class MonitorServiceImpl implements MonitorService {
-  @Autowired MetricService metricService;
+public class AutoGauge<T> implements IMetric {
+  private final WeakReference<T> refObject;
+  private final ToLongFunction<T> mapper;
 
-  @Override
-  public void addException(ExceptionMsg exceptionMsg) {
-    // TODO add exception
+  public AutoGauge(
+      io.micrometer.core.instrument.MeterRegistry meterRegistry,
+      String metricName,
+      T object,
+      ToLongFunction<T> mapper,
+      String... tags) {
+    log.info("{},{}", metricName, tags);
+    this.refObject =
+        new WeakReference<>(
+            meterRegistry.gauge(
+                metricName, Tags.of(tags), object, value -> (double) mapper.applyAsLong(value)));
+    this.mapper = mapper;
   }
 
-  @Override
-  public void addLog(Log log) {
-    // TODO add log
-  }
-
-  @Override
-  public String scrape() {
-    return metricService.scrape();
+  public long value() {
+    if (refObject.get() == null) {
+      return 0L;
+    }
+    return mapper.applyAsLong(refObject.get());
   }
 }

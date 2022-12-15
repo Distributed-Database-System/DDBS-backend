@@ -17,16 +17,35 @@
  * under the License.
  */
 
-package com.spricoder.ddbs.bl;
+package com.spricoder.ddbs.metric.type;
 
-import com.spricoder.ddbs.data.ExceptionMsg;
-import com.spricoder.ddbs.data.Log;
+import io.micrometer.core.instrument.Tags;
 
-public interface MonitorService {
+import java.util.concurrent.atomic.AtomicLong;
 
-  void addException(ExceptionMsg exceptionMsg);
+public class Gauge implements IMetric {
+  private final AtomicLong atomicLong;
 
-  void addLog(Log log);
+  public Gauge(
+      io.micrometer.core.instrument.MeterRegistry meterRegistry,
+      String metricName,
+      String... tags) {
+    atomicLong = meterRegistry.gauge(metricName, Tags.of(tags), new AtomicLong(0));
+  }
 
-  String scrape();
+  public long value() {
+    return atomicLong.get();
+  }
+
+  public void incr(long value) {
+    atomicLong.addAndGet(value);
+  }
+
+  public void decr(long value) {
+    atomicLong.addAndGet(-value);
+  }
+
+  public void set(long value) {
+    atomicLong.set(value);
+  }
 }

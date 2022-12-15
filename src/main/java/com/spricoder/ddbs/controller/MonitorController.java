@@ -17,16 +17,24 @@
  * under the License.
  */
 
-package com.spricoder.ddbs.bl;
+package com.spricoder.ddbs.controller;
 
-import com.spricoder.ddbs.data.ExceptionMsg;
-import com.spricoder.ddbs.data.Log;
+import com.spricoder.ddbs.bl.MonitorService;
 
-public interface MonitorService {
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-  void addException(ExceptionMsg exceptionMsg);
+@Validated
+@RestController
+@RequestMapping("/")
+public class MonitorController {
+  @Autowired MonitorService monitorService;
 
-  void addLog(Log log);
-
-  String scrape();
+  @GetMapping(value = "/metrics", produces = "text/plain")
+  public String metric() {
+    return monitorService.scrape();
+  }
 }

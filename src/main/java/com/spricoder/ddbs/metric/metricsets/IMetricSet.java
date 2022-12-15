@@ -7,7 +7,7 @@
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -17,16 +17,15 @@
  * under the License.
  */
 
-package com.spricoder.ddbs.bl;
+package com.spricoder.ddbs.metric.metricsets;
 
-import com.spricoder.ddbs.data.ExceptionMsg;
-import com.spricoder.ddbs.data.Log;
+import com.spricoder.ddbs.metric.MetricService;
 
-public interface MonitorService {
+/** Notice that IMetricSet should be stateless */
+public interface IMetricSet {
+  /** bind metrics to metricManager and init environment */
+  void bindTo(MetricService metricService);
 
-  void addException(ExceptionMsg exceptionMsg);
-
-  void addLog(Log log);
-
-  String scrape();
+  /** remove metrics from metricManager and clear environment */
+  void unbindFrom(MetricService metricService);
 }

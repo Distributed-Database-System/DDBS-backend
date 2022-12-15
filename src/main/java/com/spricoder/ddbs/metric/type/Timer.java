@@ -17,16 +17,30 @@
  * under the License.
  */
 
-package com.spricoder.ddbs.bl;
+package com.spricoder.ddbs.metric.type;
 
-import com.spricoder.ddbs.data.ExceptionMsg;
-import com.spricoder.ddbs.data.Log;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
-public interface MonitorService {
+public class Timer implements IMetric {
+  io.micrometer.core.instrument.Timer timer;
+  Rate micrometerRate;
 
-  void addException(ExceptionMsg exceptionMsg);
+  public Timer(io.micrometer.core.instrument.Timer timer) {
+    this.timer = timer;
+    micrometerRate = new Rate(new AtomicLong(0));
+  }
 
-  void addLog(Log log);
+  public void update(long duration, TimeUnit unit) {
+    timer.record(duration, unit);
+    micrometerRate.mark();
+  }
 
-  String scrape();
+  public HistogramSnapshot takeSnapshot() {
+    return new HistogramSnapshot(timer.takeSnapshot());
+  }
+
+  public Rate getImmutableRate() {
+    return micrometerRate;
+  }
 }

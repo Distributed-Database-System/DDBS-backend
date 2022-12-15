@@ -17,16 +17,24 @@
  * under the License.
  */
 
-package com.spricoder.ddbs.bl;
+package com.spricoder.ddbs.metric.type;
 
-import com.spricoder.ddbs.data.ExceptionMsg;
-import com.spricoder.ddbs.data.Log;
+public class Counter implements IMetric {
+  io.micrometer.core.instrument.Counter counter;
 
-public interface MonitorService {
+  public Counter(io.micrometer.core.instrument.Counter counter) {
+    this.counter = counter;
+  }
 
-  void addException(ExceptionMsg exceptionMsg);
+  public void inc() {
+    counter.increment();
+  }
 
-  void addLog(Log log);
+  public void inc(long n) {
+    counter.increment(n);
+  }
 
-  String scrape();
+  public long count() {
+    return (long) counter.count();
+  }
 }

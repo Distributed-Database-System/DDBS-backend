@@ -59,7 +59,7 @@ public class LogRequestAspect {
   public Object doAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
     Log myLog = new Log();
     long startTime = System.currentTimeMillis();
-    ResponseEntity<?> result;
+    Object result;
     // 执行方法前
     ServletRequestAttributes attributes =
         (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -81,18 +81,22 @@ public class LogRequestAspect {
         log.debug("Before:" + myLog);
       }
       // 执行方法
-      result = (ResponseEntity<?>) proceedingJoinPoint.proceed();
+      result = proceedingJoinPoint.proceed();
 
       if (request.getRequestURI() != null && request.getRequestURI().length() != 0) {
         // 执行方法后
-        myLog.setCode(result != null ? result.getStatusCode().value() : HttpStatus.OK.value());
+        if (result instanceof ResponseEntity) {
+          myLog.setCode(((ResponseEntity<?>) result).getStatusCode().value());
+        } else {
+          myLog.setCode(HttpStatus.OK.value());
+        }
         myLog.setProcessTime(System.currentTimeMillis() - startTime);
 
         monitorService.addLog(myLog);
         log.debug("After:" + myLog);
       }
     } else {
-      result = (ResponseEntity<?>) proceedingJoinPoint.proceed();
+      result = proceedingJoinPoint.proceed();
       log.error("ServletRequestAttributes is empty.");
     }
     return result;

@@ -37,8 +37,8 @@ import javax.validation.Valid;
 public class TestController {
 
   @GetMapping("/heartbeat")
-  public MyResponse heartbeat() {
-    return MyResponse.ok("Alive!");
+  public String heartbeat() {
+    return "HeartBeat";
   }
 
   @PostMapping("/testPost")

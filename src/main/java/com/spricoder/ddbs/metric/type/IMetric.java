@@ -17,16 +17,8 @@
  * under the License.
  */
 
-package com.spricoder.ddbs.bl;
+package com.spricoder.ddbs.metric.type;
 
-import com.spricoder.ddbs.data.ExceptionMsg;
-import com.spricoder.ddbs.data.Log;
-
-public interface MonitorService {
-
-  void addException(ExceptionMsg exceptionMsg);
-
-  void addLog(Log log);
-
-  String scrape();
+public interface IMetric {
+  // empty interface
 }

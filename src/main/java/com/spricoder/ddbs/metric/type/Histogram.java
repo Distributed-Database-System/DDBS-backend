@@ -17,16 +17,24 @@
  * under the License.
  */
 
-package com.spricoder.ddbs.bl;
+package com.spricoder.ddbs.metric.type;
 
-import com.spricoder.ddbs.data.ExceptionMsg;
-import com.spricoder.ddbs.data.Log;
+public class Histogram implements IMetric {
+  io.micrometer.core.instrument.DistributionSummary distributionSummary;
 
-public interface MonitorService {
+  public Histogram(io.micrometer.core.instrument.DistributionSummary distributionSummary) {
+    this.distributionSummary = distributionSummary;
+  }
 
-  void addException(ExceptionMsg exceptionMsg);
+  public void update(long value) {
+    distributionSummary.record(value);
+  }
 
-  void addLog(Log log);
+  public long count() {
+    return distributionSummary.count();
+  }
 
-  String scrape();
+  public HistogramSnapshot takeSnapshot() {
+    return new HistogramSnapshot(distributionSummary.takeSnapshot());
+  }
 }

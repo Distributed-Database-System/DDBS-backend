@@ -17,16 +17,18 @@
  * under the License.
  */
 
-package com.spricoder.ddbs.bl;
+package com.spricoder.ddbs.metric.utils;
 
-import com.spricoder.ddbs.data.ExceptionMsg;
-import com.spricoder.ddbs.data.Log;
+public enum MetricType {
+  COUNTER,
+  AUTO_GAUGE,
+  GAUGE,
+  RATE,
+  HISTOGRAM,
+  TIMER;
 
-public interface MonitorService {
-
-  void addException(ExceptionMsg exceptionMsg);
-
-  void addLog(Log log);
-
-  String scrape();
+  @Override
+  public String toString() {
+    return name();
+  }
 }

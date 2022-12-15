@@ -17,34 +17,48 @@
  * under the License.
  */
 
-package com.spricoder.ddbs.blImpl;
+package com.spricoder.ddbs.metric.type;
 
-import com.spricoder.ddbs.bl.MonitorService;
-import com.spricoder.ddbs.data.ExceptionMsg;
-import com.spricoder.ddbs.data.Log;
-import com.spricoder.ddbs.metric.MetricService;
+import com.codahale.metrics.Meter;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import java.util.concurrent.atomic.AtomicLong;
 
-@Slf4j
-@Service
-public class MonitorServiceImpl implements MonitorService {
-  @Autowired MetricService metricService;
+public class Rate implements IMetric {
+  AtomicLong atomicLong;
+  Meter meter;
 
-  @Override
-  public void addException(ExceptionMsg exceptionMsg) {
-    // TODO add exception
+  public Rate(AtomicLong atomicLong) {
+    this.atomicLong = atomicLong;
+    this.meter = new Meter();
   }
 
-  @Override
-  public void addLog(Log log) {
-    // TODO add log
+  public long getCount() {
+    return meter.getCount();
   }
 
-  @Override
-  public String scrape() {
-    return metricService.scrape();
+  public double getOneMinuteRate() {
+    return meter.getOneMinuteRate();
+  }
+
+  public double getMeanRate() {
+    return meter.getMeanRate();
+  }
+
+  public double getFiveMinuteRate() {
+    return meter.getFiveMinuteRate();
+  }
+
+  public double getFifteenMinuteRate() {
+    return meter.getFifteenMinuteRate();
+  }
+
+  public void mark() {
+    atomicLong.set(1);
+    meter.mark();
+  }
+
+  public void mark(long n) {
+    atomicLong.set(n);
+    meter.mark(n);
   }
 }
