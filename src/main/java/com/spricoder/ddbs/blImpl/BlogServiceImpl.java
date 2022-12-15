@@ -357,4 +357,13 @@ public class BlogServiceImpl implements BlogService {
   public String pingHDFS() throws IOException {
     return hdfsManager.createFile();
   }
+
+  @Override
+  public List<ReadDetail> getReadRecord(long leftTimeStamp, long rightTimeStamp) {
+    List<Criteria> criteriaList = new ArrayList<>();
+    criteriaList.add(Criteria.where("timestamp").lte(String.valueOf(rightTimeStamp)));
+    criteriaList.add(Criteria.where("timestamp").gte(String.valueOf(leftTimeStamp)));
+    Query query = generateQuery(criteriaList);
+    return mongoTemplate.find(query, ReadDetail.class);
+  }
 }

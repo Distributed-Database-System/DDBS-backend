@@ -19,6 +19,7 @@
 
 package com.spricoder.ddbs.bl;
 
+import com.spricoder.ddbs.data.ReadDetail;
 import com.spricoder.ddbs.vo.ArticleDetailVO;
 import com.spricoder.ddbs.vo.ArticleUpsertVO;
 import com.spricoder.ddbs.vo.ArticleVO;
@@ -115,4 +116,6 @@ public interface BlogService {
 
   /** Test connection of hdfs */
   String pingHDFS() throws IOException;
+
+  List<ReadDetail> getReadRecord(long leftTimeStamp, long rightTimeStamp);
 }

@@ -19,6 +19,7 @@
 package com.spricoder.ddbs.blImpl;
 
 import com.spricoder.ddbs.bl.BlogService;
+import com.spricoder.ddbs.data.ReadDetail;
 import com.spricoder.ddbs.vo.ArticleDetailVO;
 import com.spricoder.ddbs.vo.ArticleUpsertVO;
 import com.spricoder.ddbs.vo.ArticleVO;
@@ -123,5 +124,10 @@ public class MockBlogServiceImpl implements BlogService {
   @Override
   public String pingHDFS() throws IOException {
     return "Just a mock";
+  }
+
+  @Override
+  public List<ReadDetail> getReadRecord(long leftTimeStamp, long rightTimeStamp) {
+    return null;
   }
 }

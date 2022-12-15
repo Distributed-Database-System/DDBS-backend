@@ -1,5 +1,6 @@
 package com.spricoder.ddbs.blImpl;
 
+import com.spricoder.ddbs.data.ReadDetail;
 import com.spricoder.ddbs.vo.ArticleDetailVO;
 import com.spricoder.ddbs.vo.ArticleVO;
 import com.spricoder.ddbs.vo.ReadingVO;
@@ -70,5 +71,11 @@ class BlogServiceImplTest {
     Assertions.assertNotEquals(0, readingVOS.size());
     readingVOS = blogService.getRank("monthly", 1506347897000L);
     Assertions.assertNotEquals(0, readingVOS.size());
+  }
+
+  @Test
+  void getReadRecord() {
+    List<ReadDetail> readDetails = blogService.getReadRecord(1506334607000L, 1506334717000L);
+    Assertions.assertNotEquals(0, readDetails.size());
   }
 }
