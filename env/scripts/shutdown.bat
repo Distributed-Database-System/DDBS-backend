@@ -1,6 +1,6 @@
-@REM @REM app
-@REM docker stop library
-@REM docker rm library -v
+@REM app
+docker stop backend
+docker rm backend -v
 
 
 @REM mongodb

@@ -1,8 +1,8 @@
 #!/bin/bash
 
-## app
-#docker stop library
-#docker rm library -v
+# app
+docker stop backend
+docker rm backend -v
 
 
 # mongodb

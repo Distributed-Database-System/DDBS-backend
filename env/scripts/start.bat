@@ -17,5 +17,5 @@ docker-compose -f ..\mongodb\docker-compose-mongos.yml start
 timeout /T 5 /NOBREAK
 
 
-@REM @REM app
-@REM docker start library
+@REM app
+docker start backend

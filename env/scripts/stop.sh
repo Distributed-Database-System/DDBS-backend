@@ -1,7 +1,7 @@
 #!/bin/bash
 
-## app
-#docker stop library
+# app
+docker stop backend
 
 
 # mongodb

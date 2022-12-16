@@ -19,5 +19,5 @@ docker-compose -f ../mongodb/docker-compose-mongos.yml start
 sleep 5
 
 
-## app
-#docker start library
+# app
+docker start backend

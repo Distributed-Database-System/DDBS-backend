@@ -33,3 +33,10 @@ mongoimport --host localhost --port 40002 -d ddbms -c article --file ../data/art
 mongoimport --host localhost --port 40002 -d ddbms -c read --file ../data/read.dat
 mongosh --host localhost --port 40002 ../mongodb/generate-beread.js
 mongosh --host localhost --port 40002 ../mongodb/generate-rank.js
+
+cd ../..
+mvn clean package -DskipTests
+docker rmi backend:dev
+docker build -t backend:dev .
+docker run -d --name backend -p 8088:8088 backend:dev
+docker network connect hdfs_hadoopnet backend
