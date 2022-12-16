@@ -38,6 +38,8 @@ package com.spricoder.ddbs.metric.utils;
  * under the License.
  */
 
+import com.spricoder.ddbs.metric.Pair;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,7 +49,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import javafx.util.Pair;
 
 public class MetricInfo {
 

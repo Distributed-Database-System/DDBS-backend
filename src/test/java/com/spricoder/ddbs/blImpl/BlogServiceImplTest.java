@@ -3,6 +3,7 @@ package com.spricoder.ddbs.blImpl;
 import com.spricoder.ddbs.data.ReadDetail;
 import com.spricoder.ddbs.vo.ArticleDetailVO;
 import com.spricoder.ddbs.vo.ArticleVO;
+import com.spricoder.ddbs.vo.PageList;
 import com.spricoder.ddbs.vo.ReadingVO;
 import com.spricoder.ddbs.vo.UserVO;
 
@@ -25,35 +26,35 @@ class BlogServiceImplTest {
 
   @Test
   void getUserList() {
-    List<UserVO> users = blogService.getUserList(null, null, pageNo, pageSize);
-    Assertions.assertEquals(pageSize, users.size());
-    UserVO userVO = users.get(0);
+    PageList<UserVO> users = blogService.getUserList(null, null, pageNo, pageSize);
+    Assertions.assertEquals(pageSize, users.getData().size());
+    UserVO userVO = users.getData().get(0);
     users = blogService.getUserList(userVO.getUid(), null, pageNo, pageSize);
-    Assertions.assertEquals(1, users.size());
+    Assertions.assertEquals(1, users.getData().size());
     users = blogService.getUserList(null, userVO.getName(), pageNo, pageSize);
-    Assertions.assertEquals(1, users.size());
+    Assertions.assertEquals(1, users.getData().size());
     users = blogService.getUserList(userVO.getUid(), userVO.getName(), pageNo, pageSize);
-    Assertions.assertEquals(1, users.size());
+    Assertions.assertEquals(1, users.getData().size());
   }
 
   @Test
   void getArticleList() {
-    List<ArticleVO> articleVOS = blogService.getArticleList(null, null, pageNo, pageSize);
-    Assertions.assertEquals(pageSize, articleVOS.size());
-    ArticleVO articleVO = articleVOS.get(0);
+    PageList<ArticleVO> articleVOS = blogService.getArticleList(null, null, pageNo, pageSize);
+    Assertions.assertEquals(pageSize, articleVOS.getData().size());
+    ArticleVO articleVO = articleVOS.getData().get(0);
     articleVOS = blogService.getArticleList(articleVO.getAid(), null, pageNo, pageSize);
-    Assertions.assertEquals(1, articleVOS.size());
+    Assertions.assertEquals(1, articleVOS.getData().size());
     articleVOS = blogService.getArticleList(null, articleVO.getTitle(), pageNo, pageSize);
-    Assertions.assertEquals(1, articleVOS.size());
+    Assertions.assertEquals(1, articleVOS.getData().size());
     articleVOS =
         blogService.getArticleList(articleVO.getAid(), articleVO.getTitle(), pageNo, pageSize);
-    Assertions.assertEquals(1, articleVOS.size());
+    Assertions.assertEquals(1, articleVOS.getData().size());
   }
 
   @Test
   void getReadingList() {
-    List<ReadingVO> readingVOS = blogService.getReadingList("88", pageNo, pageSize);
-    Assertions.assertNotEquals(0, readingVOS.size());
+    PageList<ReadingVO> readingVOS = blogService.getReadingList("88", pageNo, pageSize);
+    Assertions.assertNotEquals(0, readingVOS.getData().size());
   }
 
   @Test
