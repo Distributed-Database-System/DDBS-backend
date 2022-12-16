@@ -78,7 +78,7 @@ public class LogRequestAspect {
         myLog.setUrl(uri.toString());
         myLog.setRequestTime(LocalDateTime.now());
 
-        log.debug("Before:" + myLog);
+        log.info("Before:" + myLog);
       }
       // 执行方法
       result = proceedingJoinPoint.proceed();
@@ -93,7 +93,7 @@ public class LogRequestAspect {
         myLog.setProcessTime(System.currentTimeMillis() - startTime);
 
         monitorService.addLog(myLog);
-        log.debug("After:" + myLog);
+        log.info("After:" + myLog);
       }
     } else {
       result = proceedingJoinPoint.proceed();
