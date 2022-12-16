@@ -23,6 +23,7 @@ import com.spricoder.ddbs.data.ReadDetail;
 import com.spricoder.ddbs.vo.ArticleDetailVO;
 import com.spricoder.ddbs.vo.ArticleUpsertVO;
 import com.spricoder.ddbs.vo.ArticleVO;
+import com.spricoder.ddbs.vo.PageList;
 import com.spricoder.ddbs.vo.ReadingVO;
 import com.spricoder.ddbs.vo.UserUpsertVO;
 import com.spricoder.ddbs.vo.UserVO;
@@ -40,7 +41,7 @@ public interface BlogService {
    * @param pageSize
    * @return
    */
-  List<UserVO> getUserList(String uid, String name, int pageNo, int pageSize);
+  PageList<UserVO> getUserList(String uid, String name, int pageNo, int pageSize);
 
   /**
    * 获取文章列表，aid和title都可能为空，可能其中一个有值或都有值。都为空代表全量查询。
@@ -51,7 +52,7 @@ public interface BlogService {
    * @param pageSize
    * @return
    */
-  List<ArticleVO> getArticleList(String aid, String title, int pageNo, int pageSize);
+  PageList<ArticleVO> getArticleList(String aid, String title, int pageNo, int pageSize);
 
   /**
    * 获取某个uid的阅读记录
@@ -61,7 +62,7 @@ public interface BlogService {
    * @param pageSize
    * @return
    */
-  List<ReadingVO> getReadingList(String uid, int pageNo, int pageSize);
+  PageList<ReadingVO> getReadingList(String uid, int pageNo, int pageSize);
 
   /**
    * 获取某个aid对应的具体文章，需要返回结果，并记录根据uid、aid更新read、beread和popular(?)

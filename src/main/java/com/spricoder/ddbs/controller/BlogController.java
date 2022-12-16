@@ -59,21 +59,14 @@ public class BlogController {
   @RequestMapping(value = "/listUser", method = RequestMethod.POST)
   public ResponseEntity<PageList<UserVO>> listUser(@RequestBody ListUserReq req) {
     return ResponseUtils.success(
-        page(
-            blogService.getUserList(
-                req.getUid(), req.getName(), req.getPageNo(), req.getPageSize()),
-            req.getPageNo(),
-            req.getPageSize()));
+        blogService.getUserList(req.getUid(), req.getName(), req.getPageNo(), req.getPageSize()));
   }
 
   @RequestMapping(value = "/listArticle", method = RequestMethod.POST)
   public ResponseEntity<PageList<ArticleVO>> listArticle(@RequestBody ListArticleReq req) {
     return ResponseUtils.success(
-        page(
-            blogService.getArticleList(
-                req.getAid(), req.getTitle(), req.getPageNo(), req.getPageSize()),
-            req.getPageNo(),
-            req.getPageSize()));
+        blogService.getArticleList(
+            req.getAid(), req.getTitle(), req.getPageNo(), req.getPageSize()));
   }
 
   @RequestMapping(value = "/getArticle", method = RequestMethod.POST)
@@ -84,10 +77,7 @@ public class BlogController {
   @RequestMapping(value = "/getReadingList", method = RequestMethod.POST)
   public ResponseEntity<PageList<ReadingVO>> listReading(@RequestBody ListReadingReq req) {
     return ResponseUtils.success(
-        page(
-            blogService.getReadingList(req.getUid(), req.getPageNo(), req.getPageSize()),
-            req.getPageNo(),
-            req.getPageSize()));
+        blogService.getReadingList(req.getUid(), req.getPageNo(), req.getPageSize()));
   }
 
   @RequestMapping(value = "/getRank", method = RequestMethod.POST)

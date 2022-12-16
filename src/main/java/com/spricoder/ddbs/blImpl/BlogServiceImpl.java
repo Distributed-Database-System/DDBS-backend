@@ -29,6 +29,7 @@ import com.spricoder.ddbs.data.User;
 import com.spricoder.ddbs.vo.ArticleDetailVO;
 import com.spricoder.ddbs.vo.ArticleUpsertVO;
 import com.spricoder.ddbs.vo.ArticleVO;
+import com.spricoder.ddbs.vo.PageList;
 import com.spricoder.ddbs.vo.ReadingVO;
 import com.spricoder.ddbs.vo.UserUpsertVO;
 import com.spricoder.ddbs.vo.UserVO;
@@ -62,37 +63,37 @@ public class BlogServiceImpl implements BlogService {
   private final Random random = new Random();
 
   @Override
-  public List<UserVO> getUserList(String uid, String name, int pageNo, int pageSize) {
+  public PageList<UserVO> getUserList(String uid, String name, int pageNo, int pageSize) {
     ArrayList<Criteria> criteria = new ArrayList<>();
-    if (uid != null) {
+    if (!uid.isEmpty()) {
       criteria.add(Criteria.where("uid").is(uid));
     }
-    if (name != null) {
+    if (!name.isEmpty()) {
       criteria.add(Criteria.where("name").is(name));
     }
     List<User> results;
     Query query = generateQuery(criteria, pageNo, pageSize);
     results = mongoTemplate.find(query, User.class);
-    return results.stream().map(UserVO::new).collect(Collectors.toList());
+    return new PageList<>(100, results.stream().map(UserVO::new).collect(Collectors.toList()));
   }
 
   @Override
-  public List<ArticleVO> getArticleList(String aid, String title, int pageNo, int pageSize) {
+  public PageList<ArticleVO> getArticleList(String aid, String title, int pageNo, int pageSize) {
     ArrayList<Criteria> criteria = new ArrayList<>();
-    if (aid != null) {
+    if (!aid.isEmpty()) {
       criteria.add(Criteria.where("aid").is(aid));
     }
-    if (title != null) {
+    if (!title.isEmpty()) {
       criteria.add(Criteria.where("title").is(title));
     }
     List<Article> results;
     Query query = generateQuery(criteria, pageNo, pageSize);
     results = mongoTemplate.find(query, Article.class);
-    return results.stream().map(ArticleVO::new).collect(Collectors.toList());
+    return new PageList<>(100, results.stream().map(ArticleVO::new).collect(Collectors.toList()));
   }
 
   @Override
-  public List<ReadingVO> getReadingList(String uid, int pageNo, int pageSize) {
+  public PageList<ReadingVO> getReadingList(String uid, int pageNo, int pageSize) {
     Query findByUidQuery = generateQuery(Criteria.where("uid").is(uid), pageNo, pageSize);
     List<ReadDetail> readDetails = mongoTemplate.find(findByUidQuery, ReadDetail.class);
     List<String> aids = readDetails.stream().map(ReadDetail::getAid).collect(Collectors.toList());
@@ -115,7 +116,7 @@ public class BlogServiceImpl implements BlogService {
       }
       result.add(readingVO);
     }
-    return result;
+    return new PageList<>(100, result);
   }
 
   @Override

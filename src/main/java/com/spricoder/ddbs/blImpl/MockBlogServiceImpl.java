@@ -23,6 +23,7 @@ import com.spricoder.ddbs.data.ReadDetail;
 import com.spricoder.ddbs.vo.ArticleDetailVO;
 import com.spricoder.ddbs.vo.ArticleUpsertVO;
 import com.spricoder.ddbs.vo.ArticleVO;
+import com.spricoder.ddbs.vo.PageList;
 import com.spricoder.ddbs.vo.ReadingVO;
 import com.spricoder.ddbs.vo.UserUpsertVO;
 import com.spricoder.ddbs.vo.UserVO;
@@ -35,7 +36,7 @@ import java.util.List;
 // @Service
 public class MockBlogServiceImpl implements BlogService {
   @Override
-  public List<UserVO> getUserList(String uid, String name, int pageNo, int pageSize) {
+  public PageList<UserVO> getUserList(String uid, String name, int pageNo, int pageSize) {
     List<UserVO> list = new ArrayList<>();
     list.add(
         new UserVO(
@@ -59,21 +60,21 @@ public class MockBlogServiceImpl implements BlogService {
         new UserVO(
             "2", "user2", "male", "email2", "phone2", "dept2", "grade2", "zh", "Beijing", "role2",
             "tag42", 17));
-    return list;
+    return new PageList<>(10, list);
   }
 
   @Override
-  public List<ArticleVO> getArticleList(String aid, String title, int pageNo, int pageSize) {
+  public PageList<ArticleVO> getArticleList(String aid, String title, int pageNo, int pageSize) {
     List<ArticleVO> list = new ArrayList<>();
     list.add(new ArticleVO("1", "title1", "technology", "abstract of article 1", "author1417"));
     list.add(new ArticleVO("2", "title2", "technology", "abstract of article 2", "zhy"));
     list.add(new ArticleVO("3", "title3", "technology", "abstract of article 3", "cyz"));
     list.add(new ArticleVO("4", "title4", "technology", "abstract of article 4", "lly"));
-    return list;
+    return new PageList<>(10, list);
   }
 
   @Override
-  public List<ReadingVO> getReadingList(String uid, int pageNo, int pageSize) {
+  public PageList<ReadingVO> getReadingList(String uid, int pageNo, int pageSize) {
     List<ReadingVO> list = new ArrayList<>();
     list.add(
         new ReadingVO(
@@ -111,7 +112,7 @@ public class MockBlogServiceImpl implements BlogService {
             "1",
             "comments to this article: (73,96)",
             "1"));
-    return list;
+    return new PageList<>(10, list);
   }
 
   @Override
