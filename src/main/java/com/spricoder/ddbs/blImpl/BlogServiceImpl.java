@@ -39,6 +39,7 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -79,7 +80,9 @@ public class BlogServiceImpl implements BlogService {
     List<User> results;
     Query query = generateQuery(criteria, pageNo, pageSize);
     results = mongoTemplate.find(query, User.class);
-    return new PageList<>(100, results.stream().map(UserVO::new).collect(Collectors.toList()));
+    return new PageList<>(
+        (int) mongoTemplate.count(generateQuery(criteria), User.class),
+        results.stream().map(UserVO::new).collect(Collectors.toList()));
   }
 
   @Override
@@ -94,7 +97,9 @@ public class BlogServiceImpl implements BlogService {
     List<Article> results;
     Query query = generateQuery(criteria, pageNo, pageSize);
     results = mongoTemplate.find(query, Article.class);
-    return new PageList<>(100, results.stream().map(ArticleVO::new).collect(Collectors.toList()));
+    return new PageList<>(
+        (int) mongoTemplate.count(generateQuery(criteria), Article.class),
+        results.stream().map(ArticleVO::new).collect(Collectors.toList()));
   }
 
   @Override
@@ -121,7 +126,9 @@ public class BlogServiceImpl implements BlogService {
       }
       result.add(readingVO);
     }
-    return new PageList<>(100, result);
+    return new PageList<>(
+        (int) mongoTemplate.count(generateQuery(Criteria.where("uid").is(uid)), ReadDetail.class),
+        result);
   }
 
   @Override
@@ -330,10 +337,20 @@ public class BlogServiceImpl implements BlogService {
     if (rank == null) {
       return new ArrayList<>();
     }
+    Map<String, Integer> slot = new HashMap<>();
+    for (int i = 0; i < Math.min(10, rank.getArticleAids().size()); i++) {
+      slot.put(rank.getArticleAids().get(i), i);
+    }
     // TODO score ?
-    Query articleQuery = generateQuery(Criteria.where("aid").in(rank.getArticleAids()));
+    Query articleQuery =
+        generateQuery(
+            Criteria.where("aid").in(rank.getArticleAids().subList(0, slot.size())), false);
     List<Article> articles = mongoTemplate.find(articleQuery, Article.class);
-    return articles.stream().map(ArticleVO::new).collect(Collectors.toList());
+    ArticleVO[] res = new ArticleVO[slot.size()];
+    for (int i = 0; i < slot.size(); i++) {
+      res[slot.get(articles.get(i).getAid())] = new ArticleVO(articles.get(i));
+    }
+    return Arrays.stream(res).collect(Collectors.toList());
   }
 
   public static String transform(String type, long timestamp) {
@@ -361,32 +378,48 @@ public class BlogServiceImpl implements BlogService {
   }
 
   private Query generateQuery(Criteria criteria) {
-    return new Query(criteria);
+    return generateQuery(criteria, true);
+  }
+
+  private Query generateQuery(Criteria criteria, boolean orderById) {
+    if (orderById) {
+      return new Query(criteria).with(Sort.by(Sort.Direction.ASC, "id"));
+    } else {
+      return new Query(criteria);
+    }
   }
 
   private Query generateQuery(List<Criteria> criteriaList) {
+    return generateQuery(criteriaList, true);
+  }
+
+  private Query generateQuery(List<Criteria> criteriaList, boolean orderById) {
     Query query;
     if (criteriaList.size() == 0) {
       query = new Query();
     } else if (criteriaList.size() == 1) {
-      query = generateQuery(criteriaList.get(0));
+      query = generateQuery(criteriaList.get(0), orderById);
     } else {
       Criteria[] arr = new Criteria[criteriaList.size()];
       criteriaList.toArray(arr);
       Criteria c = new Criteria().andOperator(arr);
       query = new Query(c);
     }
-    return query;
+    if (orderById) {
+      return query.with(Sort.by(Sort.Direction.ASC, "id"));
+    } else {
+      return query;
+    }
   }
 
   private Query generateQuery(Criteria criteria, int pageNo, int pageSize) {
     Pageable pageable = PageRequest.of(Math.max(0, pageNo - 1), pageSize);
-    return generateQuery(criteria).with(pageable);
+    return generateQuery(criteria, true).with(pageable);
   }
 
   private Query generateQuery(List<Criteria> criteriaList, int pageNo, int pageSize) {
     Pageable pageable = PageRequest.of(Math.max(0, pageNo - 1), pageSize);
-    return generateQuery(criteriaList).with(pageable);
+    return generateQuery(criteriaList, true).with(pageable);
   }
 
   @Override

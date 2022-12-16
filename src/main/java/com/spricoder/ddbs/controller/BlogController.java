@@ -97,9 +97,4 @@ public class BlogController {
         .contentType(MediaType.APPLICATION_OCTET_STREAM)
         .body(blogService.queryVideo(videoName));
   }
-
-  private static <T> PageList<T> page(List<T> list, int pageNo, int pageNum) {
-    List<T> subList = list.subList((pageNo - 1) * pageNum, Math.min(pageNo * pageNum, list.size()));
-    return new PageList<>(list.size(), subList);
-  }
 }
