@@ -49,7 +49,18 @@ public class MonitorServiceImpl implements MonitorService {
     metricService
         .getOrCreateCounter("request", "type", "code", "value", String.valueOf(log.getCode()))
         .inc();
-    metricService.getOrCreateHistogram("stage").update(log.getProcessTime());
+    metricService
+        .getOrCreateHistogram("consumed", "type", "ip", "value", log.getIp())
+        .update(log.getProcessTime());
+    metricService
+        .getOrCreateHistogram("consumed", "type", "method", "value", log.getMethod())
+        .update(log.getProcessTime());
+    metricService
+        .getOrCreateHistogram("consumed", "type", "url", "value", log.getUrl())
+        .update(log.getProcessTime());
+    metricService
+        .getOrCreateHistogram("consumed", "type", "value", String.valueOf(log.getCode()))
+        .update(log.getProcessTime());
   }
 
   @Override
