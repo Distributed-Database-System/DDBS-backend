@@ -30,7 +30,6 @@ import com.spricoder.ddbs.vo.request.GetRankReq;
 import com.spricoder.ddbs.vo.request.ListArticleReq;
 import com.spricoder.ddbs.vo.request.ListReadingReq;
 import com.spricoder.ddbs.vo.request.ListUserReq;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -42,8 +41,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.ServletContext;
-
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -87,24 +84,14 @@ public class BlogController {
 
   @RequestMapping(value = "/picture/{pictureName}", method = RequestMethod.GET)
   public ResponseEntity<byte[]> getImage(@PathVariable String pictureName) throws IOException {
-    FileInputStream fin =
-        new FileInputStream(
-            "/Users/chenyanze/Documents/课程资料/研一上/分布式数据库系统/作业/大作业/DDBS-backend/src/main/resources/image/img.png");
-    byte[] bytes = new byte[fin.available()];
-    fin.read(bytes);
-    fin.close();
-    return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(bytes);
+    return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(
+        blogService.queryPicture(pictureName));
   }
 
   @RequestMapping(value = "/video/{videoName}", method = RequestMethod.GET)
   public ResponseEntity<byte[]> getVideo(@PathVariable String videoName) throws IOException {
-    FileInputStream fin =
-        new FileInputStream(
-            "/Users/chenyanze/Documents/课程资料/研一上/分布式数据库系统/作业/大作业/DDBS-backend/src/main/resources/image/video_a20_video.flv");
-    byte[] bytes = new byte[fin.available()];
-    fin.read(bytes);
-    fin.close();
-    return ResponseEntity.ok().contentType(MediaType.APPLICATION_OCTET_STREAM).body(bytes);
+    return ResponseEntity.ok().contentType(MediaType.APPLICATION_OCTET_STREAM).body(
+        blogService.queryVideo(videoName));
   }
 
   private static <T> PageList<T> page(List<T> list, int pageNo, int pageNum) {

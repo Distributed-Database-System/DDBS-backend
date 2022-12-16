@@ -1,0 +1,15 @@
+server:
+  port: 8088
+
+spring:
+  redis:
+    database: 10
+    host: 127.0.0.1
+    port: 6379
+    timeout: 1000
+  data:
+    mongodb:
+      uri: mongodb://localhost:40002/ddbms
+      database: ddbms
+    hdfs:
+      uri: hdfs://localhost:9000

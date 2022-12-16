@@ -1,4 +1,4 @@
-#版本1
+# 版本1
 FROM java:8
 VOLUME /tmp
 ADD target/ddbs-backend-1.0.0.jar ddbs-backend.jar
