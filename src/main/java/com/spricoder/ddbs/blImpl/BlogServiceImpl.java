@@ -34,6 +34,7 @@ import com.spricoder.ddbs.vo.ReadingVO;
 import com.spricoder.ddbs.vo.UserUpsertVO;
 import com.spricoder.ddbs.vo.UserVO;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -44,8 +45,11 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -56,6 +60,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class BlogServiceImpl implements BlogService {
   @Autowired private HDFSManager hdfsManager;
@@ -266,7 +271,41 @@ public class BlogServiceImpl implements BlogService {
     articleDetailVO.setTags(article.getArticleTags());
     articleDetailVO.setAuthors(article.getAuthors());
     articleDetailVO.setLanguage(article.getLanguage());
-    articleDetailVO.setText(article.getText());
+
+    String textName = article.getText();
+    try (InputStream inputStream =
+        hdfsManager.getFileInputStream(
+            "/articles/articles/article"
+                + textName.substring(6, textName.lastIndexOf('.'))
+                + "/"
+                + textName)) {
+      StringBuilder sb = new StringBuilder();
+      BufferedReader reader = null;
+
+      try {
+        reader = new BufferedReader(new InputStreamReader(inputStream, Charset.defaultCharset()));
+        String line;
+        while ((line = reader.readLine()) != null) {
+          sb.append(line);
+        }
+      } catch (IOException e) {
+        log.error("", e);
+        throw new RuntimeException(e);
+      } finally {
+        if (reader != null) {
+          try {
+            reader.close();
+          } catch (IOException e) {
+            log.error("", e);
+          }
+        }
+      }
+      articleDetailVO.setText(sb.toString());
+    } catch (Exception e) {
+      articleDetailVO.setText(article.getText());
+      log.error("Failed to get the content of text", e);
+    }
+
     articleDetailVO.setImageList(Arrays.asList(article.getImage().split(",")));
     articleDetailVO.setVideo(article.getVideo());
     articleDetailVO.setReadNum(beReadDetail.getReadNum());
