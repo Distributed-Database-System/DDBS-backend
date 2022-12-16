@@ -129,92 +129,132 @@ public class BlogServiceImpl implements BlogService {
       articleDetailVO.setTitle("Not find!");
       return articleDetailVO;
     }
+    String region = "Beijing";
+    boolean alreadyRead = false;
+    boolean agreeOrNot = random.nextBoolean();
+    boolean commentOrNot = random.nextBoolean();
+    boolean shareOrNot = random.nextBoolean();
     // update
     Query readQuery =
         generateQuery(Arrays.asList(Criteria.where("uid").is(uid), Criteria.where("aid").is(aid)));
     ReadDetail readDetail = mongoTemplate.findOne(readQuery, ReadDetail.class);
-    Query beReadQuery = generateQuery(Criteria.where("aid").is(aid));
-    BeReadDetail beReadDetail = mongoTemplate.findOne(beReadQuery, BeReadDetail.class);
-    Update readDetailUpdate = new Update();
-    Update beReadDetailUpdate = new Update();
-    if (beReadDetail == null) {
-      beReadDetail = new BeReadDetail();
-      beReadDetailUpdate.set("aid", aid);
-      beReadDetailUpdate.set("category", article.getCategory());
-    }
-    readDetailUpdate.set("timestamp", String.valueOf(System.currentTimeMillis()));
-    beReadDetailUpdate.set("timestamp", String.valueOf(System.currentTimeMillis()));
     if (readDetail == null) {
       // not read before
-      readDetailUpdate.set("id", "r" + article.getId());
+      readDetail = new ReadDetail();
+      readDetail.setTimestamp(String.valueOf(System.currentTimeMillis()));
+      readDetail.setUid(uid);
+      readDetail.setAid(aid);
+      readDetail.setCategory(article.getCategory());
+      readDetail.setReadTimeLength(random.nextInt(100));
+      readDetail.setRegion(region);
+      readDetail.setAgreeOrNot(agreeOrNot ? "1" : "0");
+      readDetail.setShareOrNot(shareOrNot ? "1" : "0");
+      readDetail.setCommentOrNot(commentOrNot ? "1" : "0");
+      readDetail.setCommentDetail(commentOrNot ? "comment" : "Not comment");
+      mongoTemplate.insert(readDetail);
+    } else {
+      alreadyRead = true;
+      Update readDetailUpdate = new Update();
+      readDetailUpdate.set("timestamp", String.valueOf(System.currentTimeMillis()));
       readDetailUpdate.set("uid", uid);
       readDetailUpdate.set("aid", aid);
-      readDetailUpdate.set("region", random.nextBoolean() ? "Hong Kong" : "Beijing");
       readDetailUpdate.set("category", article.getCategory());
       readDetailUpdate.set("readTimeLength", random.nextInt(100));
+      readDetailUpdate.set("region", readDetail.getRegion());
+      readDetailUpdate.set("agreeOrNot", agreeOrNot ? "1" : "0");
+      readDetailUpdate.set("shareOrNot", shareOrNot ? "1" : "0");
+      readDetailUpdate.set("commentOrNot", commentOrNot ? "1" : "0");
+      readDetailUpdate.set("commentDetail", commentOrNot ? "comment" : "Not comment");
+      readQuery =
+          generateQuery(
+              Arrays.asList(
+                  Criteria.where("region").is(region),
+                  Criteria.where("uid").is(uid),
+                  Criteria.where("aid").is(aid)));
+      mongoTemplate.updateMulti(readQuery, readDetailUpdate, ReadDetail.class);
+    }
+    Query beReadQuery = generateQuery(Criteria.where("aid").is(aid));
+    BeReadDetail beReadDetail = mongoTemplate.findOne(beReadQuery, BeReadDetail.class);
+    if (beReadDetail == null) {
+      // not be read before
+      beReadDetail = new BeReadDetail();
+      beReadDetail.setTimestamp(String.valueOf(System.currentTimeMillis()));
+      beReadDetail.setAid(aid);
+      beReadDetail.setCategory(article.getCategory());
+      beReadDetail.read(uid);
+      if (agreeOrNot) {
+        beReadDetail.agree(uid);
+      }
+      if (shareOrNot) {
+        beReadDetail.share(uid);
+      }
+      if (commentOrNot) {
+        beReadDetail.comment(uid);
+      }
+      mongoTemplate.insert(beReadDetail);
+    } else {
+      Update beReadDetailUpdate = new Update();
+      beReadDetailUpdate.set("timestamp", String.valueOf(System.currentTimeMillis()));
+      beReadDetailUpdate.set("aid", aid);
+      beReadDetailUpdate.set("category", article.getCategory());
       beReadDetailUpdate.set("readNum", beReadDetail.getReadNum() + 1);
-      List<String> readUidList = beReadDetail.getReadUidList();
-      readUidList.add(uid);
-      beReadDetailUpdate.set("readUidList", readUidList);
-    } else {
-      // already read before
-      beReadDetailUpdate.set("readNum", beReadDetail.getReadNum());
+      if (!alreadyRead) {
+        List<String> readUidList = beReadDetail.getReadUidList();
+        readUidList.add(uid);
+        beReadDetailUpdate.set("readUidList", readUidList);
+      }
+      int agreeNum = beReadDetail.getAgreeNum();
+      List<String> agreeUidList = beReadDetail.getAgreeUidList();
+      if (agreeOrNot) {
+        if (!agreeUidList.contains(uid)) {
+          agreeNum++;
+          agreeUidList.add(uid);
+        }
+      } else {
+        if (agreeUidList.contains(uid)) {
+          agreeNum--;
+          agreeUidList.remove(uid);
+        }
+      }
+      beReadDetailUpdate.set("agreeNum", agreeNum);
+      beReadDetailUpdate.set("agreeUidList", agreeUidList);
+      int shareNum = beReadDetail.getShareNum();
+      List<String> shareUidList = beReadDetail.getShareUidList();
+      if (random.nextBoolean()) {
+        if (!shareUidList.contains(uid)) {
+          shareNum++;
+          shareUidList.add(uid);
+        }
+      } else {
+        if (shareUidList.contains(uid)) {
+          shareNum--;
+          shareUidList.remove(uid);
+        }
+      }
+      beReadDetailUpdate.set("shareNum", shareNum);
+      beReadDetailUpdate.set("shareUidList", shareUidList);
+      int commentNum = beReadDetail.getCommentNum();
+      List<String> commentUidList = beReadDetail.getCommentUidList();
+      if (random.nextBoolean()) {
+        if (!commentUidList.contains(uid)) {
+          commentNum++;
+          commentUidList.add(uid);
+        }
+      } else {
+        if (commentUidList.contains(uid)) {
+          commentNum--;
+          commentUidList.remove(uid);
+        }
+      }
+      beReadDetailUpdate.set("commentNum", commentNum);
+      beReadDetailUpdate.set("commentUidList", commentUidList);
+      beReadQuery =
+          generateQuery(
+              Arrays.asList(
+                  Criteria.where("aid").is(aid),
+                  Criteria.where("category").is(article.getCategory())));
+      mongoTemplate.updateMulti(beReadQuery, beReadDetailUpdate, BeReadDetail.class);
     }
-    int agreeNum = beReadDetail.getAgreeNum();
-    List<String> agreeUidList = beReadDetail.getAgreeUidList();
-    if (random.nextBoolean()) {
-      if (!agreeUidList.contains(uid)) {
-        agreeNum++;
-        agreeUidList.add(uid);
-        readDetailUpdate.set("agreeOrNot", "1");
-      }
-    } else {
-      if (agreeUidList.contains(uid)) {
-        agreeNum--;
-        agreeUidList.remove(uid);
-        readDetailUpdate.set("agreeOrNot", "0");
-      }
-    }
-    beReadDetailUpdate.set("agreeNum", agreeNum);
-    beReadDetailUpdate.set("agreeUidList", agreeUidList);
-    int shareNum = beReadDetail.getShareNum();
-    List<String> shareUidList = beReadDetail.getShareUidList();
-    if (random.nextBoolean()) {
-      if (!shareUidList.contains(uid)) {
-        shareNum++;
-        shareUidList.add(uid);
-        readDetailUpdate.set("shareOrNot", "1");
-      }
-    } else {
-      if (shareUidList.contains(uid)) {
-        shareNum--;
-        shareUidList.remove(uid);
-        readDetailUpdate.set("shareOrNot", "0");
-      }
-    }
-    beReadDetailUpdate.set("shareNum", shareNum);
-    beReadDetailUpdate.set("shareUidList", shareUidList);
-    int commentNum = beReadDetail.getCommentNum();
-    List<String> commentUidList = beReadDetail.getCommentUidList();
-    if (random.nextBoolean()) {
-      if (!commentUidList.contains(uid)) {
-        commentNum++;
-        commentUidList.add(uid);
-        readDetailUpdate.set("commentOrNot", "1");
-        readDetailUpdate.set("commentDetail", "comment");
-      }
-    } else {
-      if (commentUidList.contains(uid)) {
-        commentNum--;
-        commentUidList.remove(uid);
-        readDetailUpdate.set("commentOrNot", "0");
-        readDetailUpdate.set("commentDetail", "Not comment");
-      }
-    }
-    beReadDetailUpdate.set("commentNum", commentNum);
-    beReadDetailUpdate.set("commentUidList", commentUidList);
-    mongoTemplate.upsert(readQuery, readDetailUpdate, ReadDetail.class);
-    mongoTemplate.upsert(beReadQuery, beReadDetailUpdate, BeReadDetail.class);
 
     ArticleDetailVO articleDetailVO = new ArticleDetailVO();
     articleDetailVO.setAid(article.getAid());
