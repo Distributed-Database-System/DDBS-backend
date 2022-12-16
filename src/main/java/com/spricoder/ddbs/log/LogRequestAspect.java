@@ -1,3 +1,22 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
 package com.spricoder.ddbs.log;
 
 import com.spricoder.ddbs.bl.MonitorService;
@@ -40,7 +59,7 @@ public class LogRequestAspect {
   public Object doAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
     Log myLog = new Log();
     long startTime = System.currentTimeMillis();
-    ResponseEntity<?> result;
+    Object result;
     // 执行方法前
     ServletRequestAttributes attributes =
         (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -62,18 +81,22 @@ public class LogRequestAspect {
         log.debug("Before:" + myLog);
       }
       // 执行方法
-      result = (ResponseEntity<?>) proceedingJoinPoint.proceed();
+      result = proceedingJoinPoint.proceed();
 
       if (request.getRequestURI() != null && request.getRequestURI().length() != 0) {
         // 执行方法后
-        myLog.setCode(result != null ? result.getStatusCode().value() : HttpStatus.OK.value());
+        if (result instanceof ResponseEntity) {
+          myLog.setCode(((ResponseEntity<?>) result).getStatusCode().value());
+        } else {
+          myLog.setCode(HttpStatus.OK.value());
+        }
         myLog.setProcessTime(System.currentTimeMillis() - startTime);
 
         monitorService.addLog(myLog);
         log.debug("After:" + myLog);
       }
     } else {
-      result = (ResponseEntity<?>) proceedingJoinPoint.proceed();
+      result = proceedingJoinPoint.proceed();
       log.error("ServletRequestAttributes is empty.");
     }
     return result;

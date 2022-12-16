@@ -18,7 +18,6 @@
  */
 package com.spricoder.ddbs.vo.request;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,6 +26,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetArticleReq {
-    String aid;
-    String uid;
+  String aid;
+  String uid;
 }

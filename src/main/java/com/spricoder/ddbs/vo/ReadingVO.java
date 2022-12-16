@@ -1,6 +1,8 @@
 package com.spricoder.ddbs.vo;
 
 import lombok.AllArgsConstructor;
+import com.spricoder.ddbs.data.ReadDetail;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,4 +21,16 @@ public class ReadingVO {
   private String commentOrNot;
   private String commentDetail;
   private String shareOrNot;
+
+  public ReadingVO(ReadDetail readDetail) {
+    this.aid = readDetail.getAid();
+    // title
+    this.timestamp = readDetail.getTimestamp();
+    this.region = readDetail.getRegion();
+    this.category = readDetail.getCategory();
+    this.readTimeLength = readDetail.getReadTimeLength();
+    this.agreeOrNot = readDetail.getAgreeOrNot();
+    this.commentOrNot = readDetail.getCommentOrNot();
+    this.shareOrNot = readDetail.getShareOrNot();
+  }
 }

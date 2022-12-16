@@ -17,6 +17,24 @@
  * under the License.
  */
 
-package com.spricoder.ddbs.enums;
+package com.spricoder.ddbs.controller;
 
-public enum TestEnum {}
+import com.spricoder.ddbs.bl.MonitorService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@Validated
+@RestController
+@RequestMapping("/")
+public class MonitorController {
+  @Autowired MonitorService monitorService;
+
+  @GetMapping(value = "/metrics", produces = "text/plain")
+  public String metric() {
+    return monitorService.scrape();
+  }
+}

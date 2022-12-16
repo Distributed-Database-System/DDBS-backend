@@ -26,8 +26,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ListUserReq {
-    String uid;
-    String name;
-    int pageNo;
-    int pageSize;
+  String uid;
+  String name;
+  int pageNo;
+  int pageSize;
 }

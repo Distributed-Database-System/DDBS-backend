@@ -27,4 +27,6 @@ public interface MonitorService {
   void addException(ExceptionMsg exceptionMsg);
 
   void addLog(Log log);
+
+  String scrape();
 }

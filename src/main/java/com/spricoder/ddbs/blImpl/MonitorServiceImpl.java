@@ -22,20 +22,38 @@ package com.spricoder.ddbs.blImpl;
 import com.spricoder.ddbs.bl.MonitorService;
 import com.spricoder.ddbs.data.ExceptionMsg;
 import com.spricoder.ddbs.data.Log;
+import com.spricoder.ddbs.metric.MetricService;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
 public class MonitorServiceImpl implements MonitorService {
+  @Autowired MetricService metricService;
+
   @Override
   public void addException(ExceptionMsg exceptionMsg) {
-    // TODO add exception
+    metricService
+        .getOrCreateCounter(
+            "code", "type", "exception", "value", String.valueOf(exceptionMsg.getCode()))
+        .inc();
   }
 
   @Override
   public void addLog(Log log) {
-    // TODO add log
+    metricService.getOrCreateCounter("request", "type", "ip", "value", log.getIp()).inc();
+    metricService.getOrCreateCounter("request", "type", "method", "value", log.getMethod()).inc();
+    metricService.getOrCreateCounter("request", "type", "url", "value", log.getUrl()).inc();
+    metricService
+        .getOrCreateCounter("request", "type", "code", "value", String.valueOf(log.getCode()))
+        .inc();
+    metricService.getOrCreateHistogram("stage").update(log.getProcessTime());
+  }
+
+  @Override
+  public String scrape() {
+    return metricService.scrape();
   }
 }
