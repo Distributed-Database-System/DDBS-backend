@@ -23,7 +23,6 @@ import com.spricoder.ddbs.bl.BlogService;
 import com.spricoder.ddbs.config.hdfs.HDFSManager;
 import com.spricoder.ddbs.data.Article;
 import com.spricoder.ddbs.data.BeReadDetail;
-import com.spricoder.ddbs.data.Rank;
 import com.spricoder.ddbs.data.ReadDetail;
 import com.spricoder.ddbs.data.User;
 import com.spricoder.ddbs.vo.ArticleDetailVO;
@@ -276,24 +275,25 @@ public class BlogServiceImpl implements BlogService {
   }
 
   @Override
-  public List<ReadingVO> getRank(String type, long timestamp) {
-    String timeStr = transform(type, timestamp);
-    if (timeStr.length() == 0) {
-      return new ArrayList<>();
-    }
-    List<Criteria> criteriaList =
-        Arrays.asList(
-            Criteria.where("temporal_granularity").is(type),
-            Criteria.where("timestamp").is(timeStr));
-    Query getRankQuery = generateQuery(criteriaList);
-    Rank rank = mongoTemplate.findOne(getRankQuery, Rank.class);
-    if (rank == null) {
-      return new ArrayList<>();
-    }
-    // TODO score ?
-    Query articleQuery = generateQuery(Criteria.where("aid").in(rank.getArticleAids()));
-    List<ReadDetail> articles = mongoTemplate.find(articleQuery, ReadDetail.class);
-    return articles.stream().map(ReadingVO::new).collect(Collectors.toList());
+  public List<ArticleVO> getRank(String type, long timestamp) {
+    //    String timeStr = transform(type, timestamp);
+    //    if (timeStr.length() == 0) {
+    //      return new ArrayList<>();
+    //    }
+    //    List<Criteria> criteriaList =
+    //        Arrays.asList(
+    //            Criteria.where("temporal_granularity").is(type),
+    //            Criteria.where("timestamp").is(timeStr));
+    //    Query getRankQuery = generateQuery(criteriaList);
+    //    Rank rank = mongoTemplate.findOne(getRankQuery, Rank.class);
+    //    if (rank == null) {
+    //      return new ArrayList<>();
+    //    }
+    //    // TODO score ?
+    //    Query articleQuery = generateQuery(Criteria.where("aid").in(rank.getArticleAids()));
+    //    List<ReadDetail> articles = mongoTemplate.find(articleQuery, ReadDetail.class);
+    //    return articles.stream().map(ReadingVO::new).collect(Collectors.toList());
+    return null;
   }
 
   public static String transform(String type, long timestamp) {

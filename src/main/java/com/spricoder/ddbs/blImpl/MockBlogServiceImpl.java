@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+// @Service
 public class MockBlogServiceImpl implements BlogService {
   @Override
   public List<UserVO> getUserList(String uid, String name, int pageNo, int pageSize) {
@@ -73,7 +74,44 @@ public class MockBlogServiceImpl implements BlogService {
 
   @Override
   public List<ReadingVO> getReadingList(String uid, int pageNo, int pageSize) {
-    return null;
+    List<ReadingVO> list = new ArrayList<>();
+    list.add(
+        new ReadingVO(
+            "1",
+            "title1",
+            "1506332297000",
+            "Hong Kong",
+            "technology",
+            31,
+            "0",
+            "0",
+            "comments to this article: (73,96)",
+            "1"));
+    list.add(
+        new ReadingVO(
+            "2",
+            "title2",
+            "1506332317000",
+            "Beijing",
+            "technology",
+            31,
+            "0",
+            "1",
+            "comments to this article: (73,96)",
+            "1"));
+    list.add(
+        new ReadingVO(
+            "3",
+            "title3",
+            "1506332357000",
+            "Hong Kong",
+            "technology",
+            31,
+            "0",
+            "1",
+            "comments to this article: (73,96)",
+            "1"));
+    return list;
   }
 
   @Override
@@ -97,8 +135,24 @@ public class MockBlogServiceImpl implements BlogService {
   }
 
   @Override
-  public List<ReadingVO> getRank(String type, long timestamp) {
-    return null;
+  public List<ArticleVO> getRank(String type, long timestamp) {
+    List<ArticleVO> list = new ArrayList<>();
+    list.add(
+        new ArticleVO(
+            "1", type + "title1", "technology", timestamp + "abstract of article 1", "tietouqiao"));
+    list.add(
+        new ArticleVO(
+            "2", type + "title2", "technology", timestamp + "abstract of article 2", "zhy"));
+    list.add(
+        new ArticleVO(
+            "3", type + "title3", "technology", timestamp + "abstract of article 3", "cyz"));
+    list.add(
+        new ArticleVO(
+            "4", type + "title4", "technology", timestamp + "abstract of article 4", "lly"));
+    list.add(
+        new ArticleVO(
+            "5", type + "title4", "technology", timestamp + "abstract of article 5", "tietouqiao"));
+    return list;
   }
 
   @Override

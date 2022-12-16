@@ -80,7 +80,7 @@ public interface BlogService {
    *     如果查询的月份是历史月份，则直接返回 popular_rank 集合中最后一次计算（时间戳最大） 的数据。 （如果来不及我们就去掉timestamp，只支持实时热榜就好）
    * @return
    */
-  List<ReadingVO> getRank(String type, long timestamp);
+  List<ArticleVO> getRank(String type, long timestamp);
 
   /**
    * 从HDFS中获取图片，转为字节数组并返回 可以用 StreamUtils.copyToByteArray 将 InputStream转为byte[]，获得InputStream的方式详见坤哥
