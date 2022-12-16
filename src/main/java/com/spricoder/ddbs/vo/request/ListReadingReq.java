@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ListReadingReq {
-    String uid;
-    int pageNo;
-    int pageSize;
+  String uid;
+  int pageNo;
+  int pageSize;
 }

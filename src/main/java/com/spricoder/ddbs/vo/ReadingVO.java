@@ -1,8 +1,8 @@
 package com.spricoder.ddbs.vo;
 
-import lombok.AllArgsConstructor;
 import com.spricoder.ddbs.data.ReadDetail;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
