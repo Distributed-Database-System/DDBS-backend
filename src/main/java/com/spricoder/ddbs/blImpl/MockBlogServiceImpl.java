@@ -66,11 +66,17 @@ public class MockBlogServiceImpl implements BlogService {
   @Override
   public PageList<ArticleVO> getArticleList(String aid, String title, int pageNo, int pageSize) {
     List<ArticleVO> list = new ArrayList<>();
-    list.add(new ArticleVO("1", "title1", "technology", "abstract of article 1", "author1417"));
-    list.add(new ArticleVO("2", "title2", "technology", "abstract of article 2", "zhy"));
-    list.add(new ArticleVO("3", "title3", "technology", "abstract of article 3", "cyz"));
-    list.add(new ArticleVO("4", "title4", "technology", "abstract of article 4", "lly"));
+    list.add(
+        new ArticleVO("1", "title1", "technology", "abstract of article 1", "author1417", "tag1"));
+    list.add(new ArticleVO("2", "title2", "technology", "abstract of article 2", "zhy", "tag1"));
+    list.add(new ArticleVO("3", "title3", "technology", "abstract of article 3", "cyz", "tag1"));
+    list.add(new ArticleVO("4", "title4", "technology", "abstract of article 4", "lly", "tag1"));
     return new PageList<>(10, list);
+  }
+
+  @Override
+  public PageList<ArticleVO> getSimilarArticle(String tag, int pageNo, int pageSize) {
+    return null;
   }
 
   @Override
@@ -140,19 +146,44 @@ public class MockBlogServiceImpl implements BlogService {
     List<ArticleVO> list = new ArrayList<>();
     list.add(
         new ArticleVO(
-            "1", type + "title1", "technology", timestamp + "abstract of article 1", "tietouqiao"));
+            "1",
+            type + "title1",
+            "technology",
+            timestamp + "abstract of article 1",
+            "tietouqiao",
+            "tag1"));
     list.add(
         new ArticleVO(
-            "2", type + "title2", "technology", timestamp + "abstract of article 2", "zhy"));
+            "2",
+            type + "title2",
+            "technology",
+            timestamp + "abstract of article 2",
+            "zhy",
+            "tag1"));
     list.add(
         new ArticleVO(
-            "3", type + "title3", "technology", timestamp + "abstract of article 3", "cyz"));
+            "3",
+            type + "title3",
+            "technology",
+            timestamp + "abstract of article 3",
+            "cyz",
+            "tag1"));
     list.add(
         new ArticleVO(
-            "4", type + "title4", "technology", timestamp + "abstract of article 4", "lly"));
+            "4",
+            type + "title4",
+            "technology",
+            timestamp + "abstract of article 4",
+            "lly",
+            "tag1"));
     list.add(
         new ArticleVO(
-            "5", type + "title4", "technology", timestamp + "abstract of article 5", "tietouqiao"));
+            "5",
+            type + "title4",
+            "technology",
+            timestamp + "abstract of article 5",
+            "tietouqiao",
+            "tag1"));
     return list;
   }
 

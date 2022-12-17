@@ -32,5 +32,6 @@ public class ReadingVO {
     this.agreeOrNot = readDetail.getAgreeOrNot();
     this.commentOrNot = readDetail.getCommentOrNot();
     this.shareOrNot = readDetail.getShareOrNot();
+    this.commentDetail = readDetail.getCommentDetail();
   }
 }

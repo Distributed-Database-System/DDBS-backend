@@ -16,33 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-package com.spricoder.ddbs.vo;
-
-import com.spricoder.ddbs.data.Article;
+package com.spricoder.ddbs.vo.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class ArticleVO {
-
-  private String aid;
-  private String title;
-  private String category;
-  private String articleAbstract;
-  private String authors;
-  private String tag;
-
-  public ArticleVO(Article article) {
-    this.aid = article.getAid();
-    this.title = article.getTitle();
-    this.category = article.getCategory();
-    this.articleAbstract = article.getArticleAbstract();
-    this.authors = article.getAuthors();
-    this.tag = article.getArticleTags();
-  }
+@NoArgsConstructor
+public class ListArticleByTagReq {
+  String tag;
+  int pageNo;
+  int pageSize;
 }

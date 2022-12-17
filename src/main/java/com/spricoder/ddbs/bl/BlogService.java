@@ -54,6 +54,8 @@ public interface BlogService {
    */
   PageList<ArticleVO> getArticleList(String aid, String title, int pageNo, int pageSize);
 
+  PageList<ArticleVO> getSimilarArticle(String tag, int pageNo, int pageSize);
+
   /**
    * 获取某个uid的阅读记录
    *

@@ -27,6 +27,7 @@ import com.spricoder.ddbs.vo.ReadingVO;
 import com.spricoder.ddbs.vo.UserVO;
 import com.spricoder.ddbs.vo.request.GetArticleReq;
 import com.spricoder.ddbs.vo.request.GetRankReq;
+import com.spricoder.ddbs.vo.request.ListArticleByTagReq;
 import com.spricoder.ddbs.vo.request.ListArticleReq;
 import com.spricoder.ddbs.vo.request.ListReadingReq;
 import com.spricoder.ddbs.vo.request.ListUserReq;
@@ -38,12 +39,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.ServletContext;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -54,7 +53,6 @@ public class BlogController {
 
   @Autowired private BlogService blogService;
 
-  @ResponseBody
   @RequestMapping(value = "/listUser", method = RequestMethod.POST)
   public ResponseEntity<PageList<UserVO>> listUser(@RequestBody ListUserReq req) {
     return ResponseUtils.success(
@@ -66,6 +64,13 @@ public class BlogController {
     return ResponseUtils.success(
         blogService.getArticleList(
             req.getAid(), req.getTitle(), req.getPageNo(), req.getPageSize()));
+  }
+
+  @RequestMapping(value = "/listArticleByTag", method = RequestMethod.POST)
+  public ResponseEntity<PageList<ArticleVO>> listArticleByTag(
+      @RequestBody ListArticleByTagReq req) {
+    return ResponseUtils.success(
+        blogService.getSimilarArticle(req.getTag(), req.getPageNo(), req.getPageSize()));
   }
 
   @RequestMapping(value = "/getArticle", method = RequestMethod.POST)
@@ -85,14 +90,14 @@ public class BlogController {
   }
 
   @RequestMapping(value = "/picture/{pictureName}", method = RequestMethod.GET)
-  public ResponseEntity<byte[]> getImage(@PathVariable String pictureName) throws IOException {
+  public ResponseEntity<byte[]> getImage(@PathVariable String pictureName) {
     return ResponseEntity.ok()
         .contentType(MediaType.IMAGE_JPEG)
         .body(blogService.queryPicture(pictureName));
   }
 
   @RequestMapping(value = "/video/{videoName}", method = RequestMethod.GET)
-  public ResponseEntity<byte[]> getVideo(@PathVariable String videoName) throws IOException {
+  public ResponseEntity<byte[]> getVideo(@PathVariable String videoName) {
     return ResponseEntity.ok()
         .contentType(MediaType.APPLICATION_OCTET_STREAM)
         .body(blogService.queryVideo(videoName));

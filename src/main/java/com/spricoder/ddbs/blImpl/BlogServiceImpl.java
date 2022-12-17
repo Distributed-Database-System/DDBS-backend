@@ -103,6 +103,16 @@ public class BlogServiceImpl implements BlogService {
   }
 
   @Override
+  public PageList<ArticleVO> getSimilarArticle(String tag, int pageNo, int pageSize) {
+    Criteria criteria = Criteria.where("articleTags").is(tag);
+    Query query = generateQuery(criteria, pageNo, pageSize);
+    List<Article> results = mongoTemplate.find(query, Article.class);
+    return new PageList<>(
+        (int) mongoTemplate.count(generateQuery(criteria), Article.class),
+        results.stream().map(ArticleVO::new).collect(Collectors.toList()));
+  }
+
+  @Override
   public PageList<ReadingVO> getReadingList(String uid, int pageNo, int pageSize) {
     Query findByUidQuery = generateQuery(Criteria.where("uid").is(uid), pageNo, pageSize);
     List<ReadDetail> readDetails = mongoTemplate.find(findByUidQuery, ReadDetail.class);
