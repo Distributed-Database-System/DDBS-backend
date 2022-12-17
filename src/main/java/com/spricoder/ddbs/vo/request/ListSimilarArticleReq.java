@@ -25,8 +25,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ListArticleByTagReq {
+public class ListSimilarArticleReq {
   String tag;
+  String category;
   int pageNo;
   int pageSize;
 }

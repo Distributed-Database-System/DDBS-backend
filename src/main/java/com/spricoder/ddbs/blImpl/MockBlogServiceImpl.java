@@ -75,7 +75,8 @@ public class MockBlogServiceImpl implements BlogService {
   }
 
   @Override
-  public PageList<ArticleVO> getSimilarArticle(String tag, int pageNo, int pageSize) {
+  public PageList<ArticleVO> getSimilarArticle(
+      String tag, String category, int pageNo, int pageSize) {
     return null;
   }
 

@@ -27,9 +27,9 @@ import com.spricoder.ddbs.vo.ReadingVO;
 import com.spricoder.ddbs.vo.UserVO;
 import com.spricoder.ddbs.vo.request.GetArticleReq;
 import com.spricoder.ddbs.vo.request.GetRankReq;
-import com.spricoder.ddbs.vo.request.ListArticleByTagReq;
 import com.spricoder.ddbs.vo.request.ListArticleReq;
 import com.spricoder.ddbs.vo.request.ListReadingReq;
+import com.spricoder.ddbs.vo.request.ListSimilarArticleReq;
 import com.spricoder.ddbs.vo.request.ListUserReq;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,9 +68,10 @@ public class BlogController {
 
   @RequestMapping(value = "/listArticleByTag", method = RequestMethod.POST)
   public ResponseEntity<PageList<ArticleVO>> listArticleByTag(
-      @RequestBody ListArticleByTagReq req) {
+      @RequestBody ListSimilarArticleReq req) {
     return ResponseUtils.success(
-        blogService.getSimilarArticle(req.getTag(), req.getPageNo(), req.getPageSize()));
+        blogService.getSimilarArticle(
+            req.getTag(), req.getCategory(), req.getPageNo(), req.getPageSize()));
   }
 
   @RequestMapping(value = "/getArticle", method = RequestMethod.POST)
