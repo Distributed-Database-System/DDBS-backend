@@ -22,9 +22,11 @@ package com.spricoder.ddbs.vo;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor
-public class ArticleUpsertVO {
+public class ArticleUpsertVO implements Serializable {
 
   private String aid;
   private String timestamp;

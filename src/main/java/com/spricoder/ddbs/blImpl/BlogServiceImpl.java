@@ -37,6 +37,7 @@ import com.spricoder.ddbs.vo.UserVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -69,6 +70,7 @@ public class BlogServiceImpl implements BlogService {
   private final Random random = new Random();
 
   @Override
+  @Cacheable(value = "getUserList")
   public PageList<UserVO> getUserList(String uid, String name, int pageNo, int pageSize) {
     ArrayList<Criteria> criteria = new ArrayList<>();
     if (!uid.isEmpty()) {
@@ -86,6 +88,7 @@ public class BlogServiceImpl implements BlogService {
   }
 
   @Override
+  @Cacheable(value = "getArticleList")
   public PageList<ArticleVO> getArticleList(String aid, String title, int pageNo, int pageSize) {
     ArrayList<Criteria> criteria = new ArrayList<>();
     if (!aid.isEmpty()) {
@@ -103,6 +106,7 @@ public class BlogServiceImpl implements BlogService {
   }
 
   @Override
+  @Cacheable(value = "getSimilarArticle")
   public PageList<ArticleVO> getSimilarArticle(
       String tag, String category, int pageNo, int pageSize) {
     List<Criteria> criteria =
@@ -116,6 +120,7 @@ public class BlogServiceImpl implements BlogService {
   }
 
   @Override
+  @Cacheable(value = "getReadingList")
   public PageList<ReadingVO> getReadingList(String uid, int pageNo, int pageSize) {
     Query findByUidQuery = generateQuery(Criteria.where("uid").is(uid), pageNo, pageSize);
     List<ReadDetail> readDetails = mongoTemplate.find(findByUidQuery, ReadDetail.class);
@@ -145,6 +150,7 @@ public class BlogServiceImpl implements BlogService {
   }
 
   @Override
+  @Cacheable(value = "getArticleDetail", condition="#aid==1")
   public ArticleDetailVO getArticleDetail(String aid, String uid) {
     // find article
     Query findByAidQuery = generateQuery(Criteria.where("aid").is(aid));
@@ -336,6 +342,7 @@ public class BlogServiceImpl implements BlogService {
   }
 
   @Override
+  @Cacheable(value = "getRank")
   public List<ArticleVO> getRank(String type, long timestamp) {
     String timeStr = transform(type, timestamp);
     if (timeStr.length() == 0) {

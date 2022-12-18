@@ -22,12 +22,13 @@ package com.spricoder.ddbs.vo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 /** 用于包装分页结果 */
 @Data
 @AllArgsConstructor
-public class PageList<T> {
+public class PageList<T> implements Serializable {
   /** 总条目 */
   int total;
 

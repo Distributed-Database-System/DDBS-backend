@@ -25,10 +25,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ArticleVO {
+public class ArticleVO implements Serializable {
 
   private String aid;
   private String title;

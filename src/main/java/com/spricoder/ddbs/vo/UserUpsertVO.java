@@ -22,9 +22,11 @@ package com.spricoder.ddbs.vo;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor
-public class UserUpsertVO {
+public class UserUpsertVO implements Serializable {
 
   private String uid;
   private String name;
