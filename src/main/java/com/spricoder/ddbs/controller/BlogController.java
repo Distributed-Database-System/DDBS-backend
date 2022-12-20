@@ -20,11 +20,7 @@ package com.spricoder.ddbs.controller;
 
 import com.spricoder.ddbs.bl.BlogService;
 import com.spricoder.ddbs.util.ResponseUtils;
-import com.spricoder.ddbs.vo.ArticleDetailVO;
-import com.spricoder.ddbs.vo.ArticleVO;
-import com.spricoder.ddbs.vo.PageList;
-import com.spricoder.ddbs.vo.ReadingVO;
-import com.spricoder.ddbs.vo.UserVO;
+import com.spricoder.ddbs.vo.*;
 import com.spricoder.ddbs.vo.request.GetArticleReq;
 import com.spricoder.ddbs.vo.request.GetRankReq;
 import com.spricoder.ddbs.vo.request.ListArticleReq;
@@ -35,11 +31,7 @@ import com.spricoder.ddbs.vo.request.ListUserReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletContext;
 
@@ -102,5 +94,15 @@ public class BlogController {
     return ResponseEntity.ok()
         .contentType(MediaType.APPLICATION_OCTET_STREAM)
         .body(blogService.queryVideo(videoName));
+  }
+
+  @RequestMapping(value = "/upsert/article", method = RequestMethod.POST)
+  public ResponseEntity<Boolean> upsertArticle(@RequestBody ArticleUpsertVO articleUpsertVO) {
+    return ResponseEntity.ok(blogService.upsertArticle(articleUpsertVO));
+  }
+
+  @RequestMapping(value = "/upsert/user", method = RequestMethod.POST)
+  public ResponseEntity<Boolean> upsertUser(@RequestBody UserUpsertVO userUpsertVO) {
+    return ResponseEntity.ok(blogService.upsertUser(userUpsertVO));
   }
 }

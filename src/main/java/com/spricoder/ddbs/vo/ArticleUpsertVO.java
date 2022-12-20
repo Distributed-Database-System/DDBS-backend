@@ -29,12 +29,10 @@ import java.io.Serializable;
 public class ArticleUpsertVO implements Serializable {
 
   private String aid;
-  private String timestamp;
   private String title;
   private String category;
   private String articleAbstract;
   private String tags;
   private String authors;
   private String language;
-  private String text;
 }

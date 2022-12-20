@@ -150,7 +150,7 @@ public class BlogServiceImpl implements BlogService {
   }
 
   @Override
-  @Cacheable(value = "getArticleDetail", condition="#aid==1")
+  @Cacheable(value = "getArticleDetail", condition = "#aid==1")
   public ArticleDetailVO getArticleDetail(String aid, String uid) {
     // find article
     Query findByAidQuery = generateQuery(Criteria.where("aid").is(aid));
@@ -478,12 +478,34 @@ public class BlogServiceImpl implements BlogService {
 
   @Override
   public boolean upsertArticle(ArticleUpsertVO articleUpsertVO) {
-    return false;
+    Article article = new Article();
+    article.setId(articleUpsertVO.getAid());
+    article.setTimestamp(System.currentTimeMillis() + "");
+    article.setTitle(articleUpsertVO.getTitle());
+    article.setCategory(articleUpsertVO.getCategory());
+    article.setArticleAbstract(articleUpsertVO.getArticleAbstract());
+    article.setArticleTags(articleUpsertVO.getTags());
+    article.setAuthors(articleUpsertVO.getTags());
+    article.setLanguage(articleUpsertVO.getLanguage());
+    mongoTemplate.insert(article);
+    return true;
   }
 
   @Override
   public boolean upsertUser(UserUpsertVO userUpsertVO) {
-    return false;
+    User user = new User();
+    user.setUid(userUpsertVO.getUid());
+    user.setName(userUpsertVO.getName());
+    user.setGender(userUpsertVO.getGender());
+    user.setEmail(userUpsertVO.getEmail());
+    user.setPhone(userUpsertVO.getPhone());
+    user.setDept(userUpsertVO.getDept());
+    user.setGrade(userUpsertVO.getGrade());
+    user.setLanguage(userUpsertVO.getLanguage());
+    user.setRegion(userUpsertVO.getRegion());
+    user.setRole(userUpsertVO.getRole());
+    mongoTemplate.insert(user);
+    return true;
   }
 
   @Override
